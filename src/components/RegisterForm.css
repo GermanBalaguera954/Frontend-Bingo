@@ -1,0 +1,52 @@
+/* Estilo general del formulario de registro */
+.register-form {
+    max-width: 350px;
+    margin: 100px auto;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* Estilo para los inputs del formulario de registro */
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+/* Estilo para el botón de registro */
+.register-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.register-form button:hover {
+    background-color: #218838;
+}
+
+/* Estilo para mensajes de error en el formulario de registro */
+.register-form p {
+    color: #d9534f;
+}
+
+/* Estilo para el enlace de inicio de sesión en el formulario de registro */
+.register-form span {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}

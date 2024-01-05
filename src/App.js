@@ -20,7 +20,7 @@ const App = () => {
     const handleStartGame = () => {
         setCurrentPage('lobby'); // Cambia a la vista del lobby al presionar 'Iniciar Juego' en Home
     };
-
+    
     
     return (
         <AuthProvider>

@@ -6,20 +6,34 @@ const Lobby = ({ onGameStart }) => {
     const [players, setPlayers] = useState([]);
     const [cards, setCards] = useState([]); // Estado para las tarjetas
     const [isGameStarting, setIsGameStarting] = useState(false);
-    const [timer, setTimer] = useState(60); // Temporizador de 60 segundos
+    const [timer, setTimer] = useState(30); // Temporizador de 60 segundos
 
     // Se Obtiene los jugadores desde la API
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const response = await axios.get('/api/lobby/players');
-                setPlayers(response.data.players);
+                const response = await axios.get('https://localhost:7023/api/Lobby/players');
+                setPlayers(response.data);
             } catch (error) {
                 console.error('Error al obtener la lista de jugadores', error);
             }
         };
 
         fetchPlayers();
+    }, []);
+
+    useEffect(() => {
+        const resetLobby = async () => {
+            try {
+                await axios.post('https://localhost:7023/api/lobby/reset');
+            } catch (error) {
+                console.error('Error al resetear el lobby', error);
+            }
+        };
+
+        return () => {
+            resetLobby();
+        };
     }, []);
 
     // Lógica del temporizador
@@ -43,13 +57,20 @@ const Lobby = ({ onGameStart }) => {
     }, [timer, onGameStart]);
 
     // Función para agregar una nueva tarjeta
-    const addCard = () => {
-        const newCard = { id: Math.random(), content: "Nueva Tarjeta" };
-        setCards(previousCards => [...previousCards, newCard]);
+    const addCard = async () => {
+        try {
+            const response = await axios.get('https://localhost:7023/api/Lobby/generate');
+            const newCard = { id: Math.random(), content: response.data };
+            setCards(previousCards => [...previousCards, newCard]);
+            onGameStart();
+        } catch (error) {
+            console.error('Error al generar el tarjetón de bingo', error);
+        }
     };
 
     return (
-        <>
+
+        <div>
             <nav className="lobby-nav">
                 <span>Usuario actual: [Usuario]</span> { }
             </nav >
@@ -80,7 +101,7 @@ const Lobby = ({ onGameStart }) => {
             <footer className="lobby-footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>
-        </>
+        </div>
     );
 };
 

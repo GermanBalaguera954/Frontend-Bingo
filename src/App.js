@@ -7,32 +7,16 @@ import Lobby from './components/LobbyGame';
 import Game from './components/Game';
 
 const App = () => {
-    const [currentPage, setCurrentPage] = useState('login'); // Maneja la página actual
-
-    const handleRegisterSuccess = () => {
-        setCurrentPage('login'); // Cambia a la vista de inicio de sesión después del registro
-    };
-
-    const handleLoginSuccess = userData => {
-        setCurrentPage('home'); // Cambia a la vista Home después del inicio de sesión
-    };
-
-    const handleGoToLobby = () => {
-        setCurrentPage('lobby'); // Cambia a la vista del lobby
-    };
-
-    const handleGoToGame = () => {
-        setCurrentPage('game'); // Cambia a la vista del juego
-    };
-
+    const [currentPage, setCurrentPage] = useState('login');
+    const handleChangePage = (page) => setCurrentPage(page);
 
     return (
         <AuthProvider>
             <div className="App">
-                {currentPage === 'login' && <LoginForm onLogin={handleLoginSuccess} setCurrentPage={setCurrentPage} />}
-                {currentPage === 'register' && <RegisterForm onRegister={handleRegisterSuccess} setCurrentPage={setCurrentPage} />}
-                {currentPage === 'home' && <Home onGameStart={handleGoToLobby} />}
-                {currentPage === 'lobby' && <Lobby onGameStart={handleGoToGame} />}
+                {currentPage === 'login' && <LoginForm onLogin={() => handleChangePage('home')} />}
+                {currentPage === 'register' && <RegisterForm onRegister={() => handleChangePage('login')} />}
+                {currentPage === 'home' && <Home onGameStart={() => handleChangePage('lobby')} />}
+                {currentPage === 'lobby' && <Lobby onGameStart={() => handleChangePage('game')} />}
                 {currentPage === 'game' && <Game />}
             </div>
         </AuthProvider>
@@ -40,4 +24,3 @@ const App = () => {
 };
 
 export default App;
-

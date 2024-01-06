@@ -82,6 +82,7 @@ const LoginForm = ({ onLogin, setCurrentPage }) => {
                 <button type="submit">Iniciar Sesión</button>
                 <p>¿No tienes una cuenta? <span onClick={handleRegisterClick} style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>Regístrate</span></p>
             </form>
+            
             <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>

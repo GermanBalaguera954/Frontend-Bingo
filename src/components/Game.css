@@ -124,3 +124,112 @@
     border-radius: 8px;
     font-size: 1em;
 }
+
+.bingo-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.current-ball {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.all-balls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ball {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+
+.bingo-cell.marked {
+    background-color: rgba(197, 209, 34, 0.5);
+}
+
+.message {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 10px;
+    z-index: 10;
+    font-size: 1.1em;
+    text-align: center;
+    max-width: 15%;
+    box-sizing: border-box;
+}
+
+.current-ball-container {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+}
+
+.current-ball {
+    display: inline-block;
+    padding: 15px;
+    background-color: #f77802fa;
+    color: white;
+    font-size: 1.5em;
+}
+
+.current-ball-label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.current-ball-value {
+    font-size: 1.2em;
+    color: #333;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.winning-message {
+    color: green;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.bingo-button {
+    background-color: #4CAF50;
+    /* Color verde */
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.bingo-button:hover {
+    background-color: #45a049;
+    /* Color verde un poco más oscuro al pasar el mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bingo-button:active {
+    background-color: #397d35;
+    /* Color verde aún más oscuro al hacer clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

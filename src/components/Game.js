@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 import { isBingo } from './BingoLogic';
 import './Game.css';
 
@@ -37,11 +38,10 @@ const Game = () => {
     const handleBingoClick = () => {
         if (isBingo(markedCells)) {
             alert("¡Felicidades, has ganado!");
-            // Aquí puedes agregar lógica adicional para manejar la victoria.
         } else {
             alert("Lo siento, no has ganado. Serás redirigido al inicio.");
             // Redirige al usuario al inicio
-            window.location.href = '/'; // Asume que '/' es tu ruta de inicio
+            window.location.href = '/';
         }
     };
 
@@ -76,61 +76,80 @@ const Game = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        const connection = new HubConnectionBuilder()
+            .withUrl('https://localhost:7023/bingohub')
+            .build();
+
+        connection.start().then(() => {
+            console.log('Conectado al hub de Bingo');
+            connection.on('GameWon', () => {
+                window.location.href = '/';
+            });
+        }).catch(err => console.error('Error al conectar con el hub:', err));
+
+        return () => {
+            connection.stop();
+        };
+    }, []);
+
     return (
-        <div>
+        <div className="game-layout">
             <nav className="game-nav">
                 <h1>Bingo Game</h1>
             </nav>
-            <p className="message">{message}</p>
-            <div className="game">
-
-                <div className="game-container">
-                    <div className="bingo-section">
-                        <div className="bingo-header">
-                            {['B', 'I', 'N', 'G', 'O'].map((letter, index) => (
-                                <div key={index} className="bingo-header-cell">{letter}</div>
-                            ))}
-                        </div>
-                        <div className="bingo-card">
-                            {bingoCard.map((row, rowIndex) => (
-                                <div key={rowIndex} className="bingo-row">
-                                    {row.map((number, numberIndex) => {
-                                        const cellId = `${rowIndex}-${numberIndex}`;
-                                        const isMarked = markedCells.has(cellId);
-                                        return (
-                                            <div key={numberIndex}
-                                                className={`bingo-cell ${isMarked ? 'marked' : ''}`}
-                                                onClick={() => handleCellClick(rowIndex, numberIndex, number)}>
-                                                {number}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ))}
-                        </div>
+            <div className="game-board">
+                <div className="bingo-card-section">
+                    <div className="bingo-header">
+                        {['B', 'I', 'N', 'G', 'O'].map((letter, index) => (
+                            <div key={index} className="bingo-header-cell">{letter}</div>
+                        ))}
+                    </div>
+                    <div className="bingo-card">
+                        {bingoCard.map((row, rowIndex) => (
+                            <div key={rowIndex} className="bingo-row">
+                                {row.map((number, numberIndex) => {
+                                    const cellId = `${rowIndex}-${numberIndex}`;
+                                    const isMarked = markedCells.has(cellId);
+                                    return (
+                                        <div key={numberIndex}
+                                            className={`bingo-cell ${isMarked ? 'marked' : ''}`}
+                                            onClick={() => handleCellClick(rowIndex, numberIndex, number)}>
+                                            {number}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                <div className="bingo-container">
+                <div className="side-section">
+                    <div className="message-container">
+                        <p className="message">{message}</p>
+                    </div>
                     <div className="current-ball-container">
                         <div className="current-ball">
-                            <span className="current-ball-label">Bola Actual:</span>
+                            <span className="current-ball-label">Balota actual: </span>
                             <span className="current-ball-value">
                                 {currentBall ? `${currentBall.column}${currentBall.number}` : 'Ninguna'}
                             </span>
                         </div>
                     </div>
-                    {/* <div className="all-balls">
-                        {allBalls.map((ball, index) => (
-                            <span key={index} className="ball">{`${ball.column}${ball.number}`}</span>
-                        ))}
-                    </div> */}
+                    <button onClick={handleBingoClick} className="bingo-button">BINGO</button>
                 </div>
-                <button onClick={handleBingoClick} className="bingo-button">Bingo</button>
-                <footer className="footer-game">
-                    <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
-                </footer>
+
+                <div class="players-list-section">
+                    <div className="players-list">
+                        {/* Lista de jugadores */}
+                        <h2>Jugadores en sala</h2>
+                        {/* Pendiente lista de jugadores que renderizar aquí */}
+                    </div>
+                </div>
             </div>
+            <footer className="footer-game">
+                <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
+            </footer>
         </div>
     );
 };

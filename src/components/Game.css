@@ -1,235 +1,170 @@
-.game-container {
-    font-family: 'Arial', sans-serif;
-    text-align: center;
-    padding: 20px;
-}
-
-.game-nav {
-    background-color: blue;
-    color: white;
-    padding: 10px 0;
-    margin-bottom: 20px;
-}
-
-.ball-container {
+/* Estilos generales */
+.game-layout {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.ball {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    border-radius: 50%;
-    background-color: #f2f2f2;
-    margin: 5px;
-    display: inline-block;
-    font-size: 20px;
-    color: #333;
-}
-
-.current-ball {
-    font-size: 30px;
-    color: #d9534f;
-    margin-bottom: 20px;
-}
-
-.player-list {
-    margin-bottom: 20px;
-}
-
-.player-list li {
-    list-style-type: none;
-    padding: 5px;
-    border-bottom: 1px solid #ddd;
-}
-
-.bingo-button {
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.bingo-button:hover {
-    background-color: #4cae4c;
-}
-
-.footer-game {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+/* Barra de navegación */
+.game-nav {
     background-color: #333;
     color: white;
-    text-align: center;
     padding: 10px 0;
-}
-
-.game {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.game-nav,
-.footer-game {
     text-align: center;
 }
 
-.game-container {
+/* Área de juego principal */
+.game-board {
     display: flex;
+    flex: 1;
     justify-content: space-around;
-    width: 100%;
-}
-
-.bingo-section {
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
 }
 
+/* Sección de la tarjeta de bingo */
+.bingo-card-section {
+    max-width: 300px;
+    width: 30%;
+    background-color: #f8f0ff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabecera de la tarjeta de bingo */
 .bingo-header {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .bingo-header-cell {
+    width: 50%;
     text-align: center;
     font-size: 1.4em;
     font-weight: bold;
 }
 
+/* Tarjeta de bingo */
 .bingo-card {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
-    margin: 10px 0;
-    width: 250px;
+    gap: 5px;
 }
 
 .bingo-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    background-color: #f0f0f0;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
     font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.bingo-container {
-    text-align: center;
-    padding: 20px;
+.bingo-cell.marked {
+    background-color: #adff2f;
+}
+
+/* Sección lateral */
+.side-section {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Mensaje */
+.message-container {
+    background-color: #ff6347;
+    color: white;
+    padding: 10px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.current-ball-container {
+    background-color: #ffa500;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .current-ball {
     font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.all-balls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.ball {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 50%;
-    background-color: #f2f2f2;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-}
-
-.bingo-cell.marked {
-    background-color: rgba(197, 209, 34, 0.5);
-}
-
-.message {
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 10px 10px;
-    border-radius: 10px;
-    z-index: 10;
-    font-size: 1.1em;
-    text-align: center;
-    max-width: 15%;
-    box-sizing: border-box;
-}
-
-.current-ball-container {
-    text-align: center;
-    margin: 20px;
-    padding: 10px;
-}
-
-.current-ball {
-    display: inline-block;
     padding: 15px;
     background-color: #f77802fa;
     color: white;
-    font-size: 1.5em;
-}
-
-.current-ball-label {
-    margin-right: 10px;
     font-weight: bold;
 }
 
-.current-ball-value {
-    font-size: 1.2em;
-    color: #333;
-
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.winning-message {
-    color: green;
-    font-size: 1.5em;
-    text-align: center;
-    margin: 20px 0;
-}
-
+/* Botón de Bingo */
 .bingo-button {
-    background-color: #4CAF50;
-    /* Color verde */
-    color: white;
+    background-color: #28a745;
     padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, box-shadow 0.3s;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    color: #f0f0f0;
+    font-size: 20px;
 }
 
 .bingo-button:hover {
     background-color: #45a049;
-    /* Color verde un poco más oscuro al pasar el mouse */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .bingo-button:active {
     background-color: #397d35;
-    /* Color verde aún más oscuro al hacer clic */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.players-list-section {
+    width: 30%;
+    background-color: #d0f0c0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* Lista de jugadores */
+.players-list {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: auto;
+    text-align: center;
+}
+
+/* Pie de página */
+.footer-game {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: static;
+    width: 100%;
+}
+
+/* Ajustes de respuesta para tamaños de pantalla más pequeños */
+@media (max-width: 768px) {
+    .game-board {
+        flex-direction: column;
+    }
+
+    .bingo-card-section,
+    .side-section {
+        flex-grow: 0;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
 }

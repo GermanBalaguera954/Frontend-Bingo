@@ -1,14 +1,42 @@
+.container-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    background-color: #333;
+    background-image: linear-gradient(to right, #4b6cb7, #182848);
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+
+.login-nav h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
 /* Estilo general del formulario */
 .login-form {
-    max-width: 350px;
-    margin: 100px auto;
-    padding: 25px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-    font-family: 'Arial', sans-serif;
     text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 2);
+    flex-direction: column;
+    justify-content: center;
+    color: white;
 }
+
 
 /* Estilo para los inputs del formulario */
 .login-form input[type="email"],
@@ -40,7 +68,7 @@
 .login-form button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #279c54;
     color: white;
     border: none;
     border-radius: 5px;
@@ -49,38 +77,26 @@
 }
 
 .login-form button:hover {
-    background-color: #0056cc;
+    background-color: #2a04b6;
 }
 
 /* Estilo para mensajes de error */
 .login-form p {
-    color: #d9534f;
+    color: #f00800;
 }
-
 
 .login-form label {
     margin-left: 5px;
+    color: black;
 }
 
 /* Estilo para el enlace a registro */
 .login-form span {
-    color: blue;
+    color: rgb(0, 0, 0);
     cursor: pointer;
-    text-decoration: underline;
 }
 
 /* Estilo para la opción recuérdame */
 .login-form div {
-    margin: 20px 0;
-}
-
-.footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
+    margin: 15px 0;
 }

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import './LoginForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import './LoginForm.css';
 
 const LoginForm = ({ onLogin, setCurrentPage }) => {
     const [email, setEmail] = useState('');
@@ -18,15 +19,24 @@ const LoginForm = ({ onLogin, setCurrentPage }) => {
                 email,
                 password
             });
-            localStorage.setItem("rememberMe", rememberMe ? "true" : "false");
+
+            const { token } = response.data;
+            localStorage.setItem("token", token);
             if (rememberMe) {
+                localStorage.setItem("rememberMe", "true");
                 localStorage.setItem("email", email);
             } else {
+                localStorage.removeItem("rememberMe");
                 localStorage.removeItem("email");
             }
-            onLogin(response.data); // Manejo de los datos de autenticación
+
+            // Decodifica el token para obtener el nombre de usuario
+            const decodedToken = jwtDecode(token);
+            const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+            localStorage.setItem("username", username); // Guarda el nombre de usuario para usarlo globalmente
+
+            onLogin();
         } catch (error) {
-            // Manejo de errores
             if (error.response) {
                 setErrorMessage(error.response.data);
             } else {
@@ -35,54 +45,60 @@ const LoginForm = ({ onLogin, setCurrentPage }) => {
         }
     };
 
-    const handleRegisterClick = () => {
-        setCurrentPage('register');
-    };
-
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+    const handleRegisterClick = () => {
+        setCurrentPage('register');
+    };
+
     return (
         <div>
-            <form className="login-form" onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-
-                <div className="password-input-container">
+            <nav className="login-nav">
+                <h1>BIENVENIDOS AL BINGO GRAN BUDA </h1>
+            </nav>
+            <div className='container-login'>
+                <form className="login-form" onSubmit={handleSubmit}>
                     <input
-                        type={passwordVisible ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Contraseña"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
                         required
                     />
-                    <span className="password-icon" onClick={togglePasswordVisibility}>
-                        {passwordVisible
-                            ? <FontAwesomeIcon icon={faEyeSlash} />
-                            : <FontAwesomeIcon icon={faEye} />}
-                    </span>
-                </div>
 
-                <div>
-                    <input
-                        type="checkbox"
-                        id="rememberMe"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <label htmlFor="rememberMe">Recuérdame</label>
-                </div>
-                {errorMessage && <p>{errorMessage}</p>}
-                <button type="submit">Iniciar Sesión</button>
-                <p>¿No tienes una cuenta? <span onClick={handleRegisterClick} style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>Regístrate</span></p>
-            </form>
-            
+                    <div className="password-input-container">
+                        <input
+                            type={passwordVisible ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Contraseña"
+                            required
+                            autoComplete="current-password"
+                        />
+                        <span className="password-icon" onClick={togglePasswordVisibility}>
+                            {passwordVisible
+                                ? <FontAwesomeIcon icon={faEyeSlash} />
+                                : <FontAwesomeIcon icon={faEye} />}
+                        </span>
+                    </div>
+
+                    <div>
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <label htmlFor="rememberMe">Recuérdame</label>
+                    </div>
+                    {errorMessage && <p>{errorMessage}</p>}
+                    <button type="submit">Iniciar Sesión</button>
+                    <p>¿No tienes una cuenta? <span onClick={handleRegisterClick} style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>Regístrate</span></p>
+                </form>
+            </div>
+
             <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>

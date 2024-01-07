@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { isBingo } from './BingoLogic';
 import './Game.css';
 
-const Game = () => {
+const Game = ({ onGoToHome }) => {
     const [bingoCard, setBingoCard] = useState([]);
     const [currentBall, setCurrentBall] = useState(null);
     const [allBalls, setAllBalls] = useState([]);
     const [markedCells, setMarkedCells] = useState(new Set());
     const [message, setMessage] = useState('');
     const [setIsWinner] = useState(false);
+    const [gameType, setGameType] = useState('');
+    const [drawnNumbers] = useState([]);
+    const [gameStarted, setGameStarted] = useState(false);
+    const username = localStorage.getItem('username') || 'Invitado';
+    const MySwal = withReactContent(Swal);
+
+
 
     const handleCellClick = (rowIndex, numberIndex, number) => {
         if (allBalls.some(ball => ball.number === number)) {
@@ -21,14 +30,13 @@ const Game = () => {
                 } else {
                     newMarked.add(cellId);
                 }
-                // Comprobar si hay bingo después de actualizar las celdas marcadas
-                if (isBingo(newMarked)) {
+                if (isBingo(newMarked, gameType)) {
                     console.log("¡Bingo!");
                     setIsWinner(true);
                 }
                 return newMarked;
             });
-            setMessage(''); // Limpiar cualquier mensaje anterior
+            setMessage('');
         } else {
             setMessage("Balota no ha sido anunciada aún.");
             setTimeout(() => setMessage(''), 1000);
@@ -36,13 +44,29 @@ const Game = () => {
     };
 
     const handleBingoClick = () => {
-        if (isBingo(markedCells)) {
-            alert("¡Felicidades, has ganado!");
+        if (isBingo(markedCells, gameType, drawnNumbers)) {
+            MySwal.fire({
+                title: '¡Felicidades!',
+                text: '¡Has ganado!',
+                icon: 'success',
+                confirmButtonText: 'Genial'
+            });
         } else {
-            alert("Lo siento, no has ganado. Serás redirigido al inicio.");
-            // Redirige al usuario al inicio
-            window.location.href = '/';
+            MySwal.fire({
+                title: 'Oh no...',
+                text: 'Lo siento, aún no tienes bingo y serás redirigido al home.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                onGoToHome();
+            });
         }
+    };
+
+
+    const handleGameTypeChange = (e) => {
+        setGameType(e.target.value);
+        setGameStarted(true);
     };
 
     useEffect(() => {
@@ -94,11 +118,13 @@ const Game = () => {
     }, []);
 
     return (
-        <div className="game-layout">
+        <div>
             <nav className="game-nav">
                 <h1>Bingo Game</h1>
+                <span className="user-info">Usuario: {username}</span>
             </nav>
-            <div className="game-board">
+
+            <div className="container-game">
                 <div className="bingo-card-section">
                     <div className="bingo-header">
                         {['B', 'I', 'N', 'G', 'O'].map((letter, index) => (
@@ -146,8 +172,24 @@ const Game = () => {
                         {/* Pendiente lista de jugadores que renderizar aquí */}
                     </div>
                 </div>
+
+                <div className="game-type-selection">
+                    <label>
+                        Selecciona el tipo de juego:
+                        <select
+                            value={gameType} onChange={handleGameTypeChange} disabled={gameStarted}>
+                            <option value="">Seleccione</option>
+                            <option value="fullHouse">Cartón Pleno</option>
+                            <option value="horizontalLine">Línea Horizontal</option>
+                            <option value="verticalLine">Línea Vertical</option>
+                            <option value="diagonal">Diagonal</option>
+                            <option value="corners">Esquinas</option>
+                        </select>
+                    </label>
+                </div>
+
             </div>
-            <footer className="footer-game">
+            <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>
         </div>

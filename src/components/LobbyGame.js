@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './LobbyGame.css';
 
 const Lobby = ({ onGameStart }) => {
-    const [isGameStarting] = useState(false);//Inicio de Juego
-    const [timer, setTimer] = useState(5); // Temporizador
+    const [isGameStarting] = useState(false);
+    const [timer, setTimer] = useState(5);
+    const username = localStorage.getItem('username') || 'Invitado';
 
-    // useEffect para el temporizador
     useEffect(() => {
         let timerId;
         if (timer > 0) {
@@ -15,8 +15,7 @@ const Lobby = ({ onGameStart }) => {
         }
         return () => clearInterval(timerId);
     }, [timer]);
-
-    // Inicia juego cuando termina el temporizador
+    
     useEffect(() => {
         if (timer <= 0 && !isGameStarting) {
         }
@@ -25,21 +24,24 @@ const Lobby = ({ onGameStart }) => {
     return (
         <div>
             <nav className="lobby-nav">
-                <span>Usuario actual: [Usuario]</span> { }
-            </nav >
-            <div className="lobby-container">
-                <h1 className="lobby-header">Mas jugadores ingresando ¡Por favor espere!</h1>
-                <div>
-                    <p>Tiempo restante para iniciar el juego: {timer} segundos</p>
-                    <p>Jugadores en espera:</p>
-                    {
-                        timer <= 0 && (
-                            <button className="lobby-button" onClick={onGameStart}>Crear Tarjeton</button>
-                        )
-                    }
+                <h1>Bingo Game</h1>
+                <span className="user-info">Usuario: {username}</span>
+            </nav>
+            <div className='container-lobby'>
+                <div className='layout-lobby'>
+                    <h1 className="lobby-header">Hay mas jugadores ingresando</h1>
+                    <div className='lobby-timer'>
+                        <p>Tiempo restante para iniciar el juego: {timer} segundos</p>
+                        <p>Jugadores en espera:</p>
+                        {
+                            timer <= 0 && (
+                                <button className="lobby-button" onClick={onGameStart}>Crear Tarjeton</button>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
-            <footer className="lobby-footer">
+            <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>
         </div>

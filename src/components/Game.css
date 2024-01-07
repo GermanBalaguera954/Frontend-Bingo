@@ -1,26 +1,34 @@
 /* Estilos generales */
-.game-layout {
+.container-game {
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
 }
 
-/* Barra de navegación */
 .game-nav {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-}
-
-/* Área de juego principal */
-.game-board {
     display: flex;
-    flex: 1;
     justify-content: space-around;
     align-items: center;
-    padding: 20px;
-    background-color: #f0f0f0;
+    padding: 10px 20px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    background-color: #333;
+    background-image: linear-gradient(to right, #4b6cb7, #182848);
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+
+.game-nav h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.user-info {
+    font-size: 1em;
+    font-weight: normal;
 }
 
 /* Sección de la tarjeta de bingo */
@@ -30,7 +38,6 @@
     background-color: #f8f0ff;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Cabecera de la tarjeta de bingo */
@@ -79,13 +86,9 @@
 
 /* Mensaje */
 .message-container {
-    background-color: #ff6347;
-    color: white;
-    padding: 10px;
-    border-radius: 50px;
+    color: rgb(0, 0, 0);
     margin-bottom: 20px;
-    width: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
 }
 
 .current-ball-container {
@@ -110,22 +113,14 @@
     background-color: #28a745;
     padding: 15px 32px;
     border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
     color: #f0f0f0;
-    font-size: 20px;
+    font-size: 30px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .bingo-button:hover {
-    background-color: #45a049;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: #0026a5;
 }
-
-.bingo-button:active {
-    background-color: #397d35;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
 
 .players-list-section {
     width: 30%;
@@ -144,14 +139,34 @@
     text-align: center;
 }
 
-/* Pie de página */
-.footer-game {
-    background-color: #333;
-    color: white;
+/*Seleccionar tipo de juego*/
+.game-type-selection {
+    margin-top: 20px;
     text-align: center;
-    padding: 10px 0;
-    position: static;
-    width: 100%;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-type-selection label {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.game-type-selection select {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+}
+
+.game-type-selection select:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
 /* Ajustes de respuesta para tamaños de pantalla más pequeños */

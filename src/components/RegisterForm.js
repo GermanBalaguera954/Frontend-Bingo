@@ -29,28 +29,36 @@ const RegisterForm = ({ onRegister, setCurrentPage }) => {
 
     return (
         <div>
-            <form className="register-form" onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Contraseña"
-                    required
-                />
-                {errorMessage && <p>{errorMessage}</p>}
-                <button type="submit">Registrarse</button>
-                <p>¿Ya tienes una cuenta? <span onClick={handleLoginLinkClick} style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>Iniciar sesión</span></p>
-            </form>
+            <nav className="register-nav">
+                <h1>BIENVENIDOS AL BINGO GRAN BUDA </h1>
+            </nav>
+            <div className='container-register'>
+                <form className="register-form" onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
+                        required
+                    />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Contraseña"
+                        required
+                        autoComplete="new-password"
+                    />
+                    {errorMessage && <p>{errorMessage}</p>}
+                    <button type="submit">Registrarse</button>
+                    <p>¿Ya tienes una cuenta? <span onClick={handleLoginLinkClick} style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>Iniciar sesión</span></p>
+                </form>
+            </div>
+
             <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>
+
         </div>
     );
 };

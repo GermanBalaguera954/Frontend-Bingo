@@ -1,52 +1,79 @@
+.container-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.register-nav {
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    background-color: #333;
+    background-image: linear-gradient(to right, #4b6cb7, #182848);
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .register-nav h1 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
 /* Estilo general del formulario de registro */
 .register-form {
-    max-width: 350px;
-    margin: 100px auto;
-    padding: 25px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-    font-family: 'Arial', sans-serif;
     text-align: center;
+    padding: 30px;
+    background-color: #fffffffb;
+    border-radius: 15px;
+    display: flex;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 2);
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    gap: 20px;
 }
 
 /* Estilo para los inputs del formulario de registro */
 .register-form input[type="email"],
-.register-form input[type="password"] {
+.register-form input[type="password"],
+.register-form input[type="text"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    margin-top: 20px;
 }
 
 /* Estilo para el botón de registro */
 .register-form button {
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #2a04b6;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-top: 20px;
 }
 
 .register-form button:hover {
-    background-color: #218838;
+    background-color: #279c54;
 }
 
-/* Estilo para mensajes de error en el formulario de registro */
+
+/* Estilo para mensajes de error */
 .register-form p {
-    color: #d9534f;
+    color: #e92222;
 }
 
 /* Estilo para el enlace de inicio de sesión en el formulario de registro */
 .register-form span {
-    color: blue;
+    color: #ffffff;
     cursor: pointer;
     text-decoration: underline;
 }

@@ -70,6 +70,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 25px;
+    height: 25px;
 }
 
 .bingo-cell.marked {
@@ -82,6 +84,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 50px 50px;
 }
 
 /* Mensaje */
@@ -141,12 +144,11 @@
 
 /*Seleccionar tipo de juego*/
 .game-type-selection {
-    margin-top: 20px;
     text-align: center;
     background-color: #f2f2f2;
-    padding: 10px;
+    padding: 10px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
 .game-type-selection label {

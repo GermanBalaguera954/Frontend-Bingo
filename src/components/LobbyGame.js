@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './LobbyGame.css';
 
-const Lobby = ({ onGameStart }) => {
+const Lobby = ({ onGameStart, onGoToLogin }) => {
     const [isGameStarting] = useState(false);
     const [timer, setTimer] = useState(5);
     const username = localStorage.getItem('username') || 'Invitado';
+    
+    const handleLogout = () => {
+        localStorage.removeItem('username');
+        onGoToLogin();
+    };
 
     useEffect(() => {
         let timerId;
@@ -15,7 +20,7 @@ const Lobby = ({ onGameStart }) => {
         }
         return () => clearInterval(timerId);
     }, [timer]);
-    
+
     useEffect(() => {
         if (timer <= 0 && !isGameStarting) {
         }
@@ -26,6 +31,7 @@ const Lobby = ({ onGameStart }) => {
             <nav className="lobby-nav">
                 <h1>Bingo Game</h1>
                 <span className="user-info">Usuario: {username}</span>
+                <button onClick={handleLogout} className="logout-button">Logout</button>
             </nav>
             <div className='container-lobby'>
                 <div className='layout-lobby'>

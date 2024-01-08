@@ -33,7 +33,7 @@ const LoginForm = ({ onLogin, setCurrentPage }) => {
             // Decodifica el token para obtener el nombre de usuario
             const decodedToken = jwtDecode(token);
             const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-            localStorage.setItem("username", username); // Guarda el nombre de usuario para usarlo globalmente
+            localStorage.setItem("username", username);
 
             onLogin();
         } catch (error) {

@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { isBingo } from './BingoLogic';
 import './Game.css';
 
-const Game = ({ onGoToHome }) => {
+const Game = ({ onGoToHome, onGoToLogin }) => {
     const [bingoCard, setBingoCard] = useState([]);
     const [currentBall, setCurrentBall] = useState(null);
     const [allBalls, setAllBalls] = useState([]);
     const [markedCells, setMarkedCells] = useState(new Set());
     const [message, setMessage] = useState('');
-    const [setIsWinner] = useState(false);
     const [gameType, setGameType] = useState('');
-    const [drawnNumbers] = useState([]);
     const [gameStarted, setGameStarted] = useState(false);
     const username = localStorage.getItem('username') || 'Invitado';
     const MySwal = withReactContent(Swal);
+    const connection = useRef(null);
 
-
-
+    //Color para la celdas del tarjeton
     const handleCellClick = (rowIndex, numberIndex, number) => {
         if (allBalls.some(ball => ball.number === number)) {
             const cellId = `${rowIndex}-${numberIndex}`;
@@ -30,10 +27,6 @@ const Game = ({ onGoToHome }) => {
                 } else {
                     newMarked.add(cellId);
                 }
-                if (isBingo(newMarked, gameType)) {
-                    console.log("¡Bingo!");
-                    setIsWinner(true);
-                }
                 return newMarked;
             });
             setMessage('');
@@ -43,30 +36,59 @@ const Game = ({ onGoToHome }) => {
         }
     };
 
-    const handleBingoClick = () => {
-        if (isBingo(markedCells, gameType, drawnNumbers)) {
-            MySwal.fire({
-                title: '¡Felicidades!',
-                text: '¡Has ganado!',
-                icon: 'success',
-                confirmButtonText: 'Genial'
+    //Verificacion para saber si hubo bingo
+    const handleBingoClick = async () => {
+        const requestData = {
+            MarkedCellNumbers: Array.from(markedCells).reduce((acc, cellId) => {
+                const [row, col] = cellId.split('-').map(Number);
+                acc[cellId] = bingoCard[row][col];
+                return acc;
+            }, {}),
+            GameType: gameType,
+            DrawnNumbers: allBalls.map(ball => ball.number)
+        };
+        try {
+            const response = await fetch('https://localhost:7023/api/games/checkBingo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
             });
-        } else {
-            MySwal.fire({
-                title: 'Oh no...',
-                text: 'Lo siento, aún no tienes bingo y serás redirigido al home.',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                onGoToHome();
-            });
+
+            const result = await response.json();
+            if (result) {
+                MySwal.fire({
+                    title: '¡Felicidades!',
+                    text: '¡Has ganado!',
+                    icon: 'success',
+                    confirmButtonText: 'Genial'
+                }).then(() => {
+                    onGoToHome();
+                });
+            } else {
+                MySwal.fire({
+                    title: 'Oh no...',
+                    text: 'Lo siento, aún no tienes bingo y serás redirigido al home.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    onGoToHome();
+                });
+            }
+        } catch (error) {
+            console.error('Error al verificar el bingo:', error);
         }
     };
-
 
     const handleGameTypeChange = (e) => {
         setGameType(e.target.value);
         setGameStarted(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('username');
+        onGoToLogin();
     };
 
     useEffect(() => {
@@ -80,48 +102,75 @@ const Game = ({ onGoToHome }) => {
             .catch(error => console.error('Error:', error));
     }, []);
 
+    //Sorteo de balotas
     useEffect(() => {
-        const fetchNextBall = () => {
-            fetch('https://localhost:7023/api/games/nextball')
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.column && data.number) {
-                        setCurrentBall(data);
-                        setAllBalls(prevBalls => [...prevBalls, data]);
-                    } else {
-                        console.log('Respuesta inesperada:', data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al obtener la próxima bola:', error);
-                });
+        let intervalId;
+        const drawBall = async () => {
+            try {
+                const response = await fetch('https://localhost:7023/api/games/draw');
+                const data = await response.json();
+
+                if (typeof data === 'string') {
+                    console.log(data);
+                    clearInterval(intervalId);
+                } else if (data && data.column && data.number) {
+                    setCurrentBall(data);
+                    setAllBalls(prevBalls => [...prevBalls, data]);
+                    console.log("Balota sorteada:", data);
+                } else {
+                    console.error('Formato de respuesta inesperado:', data);
+                }
+            } catch (error) {
+                console.error('Error al sortear balota:', error);
+            }
         };
-        const interval = setInterval(fetchNextBall, 5000);
-        return () => clearInterval(interval);
+        intervalId = setInterval(() => {
+            drawBall();
+        }, 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
+    //Reinicio de sorteo de balotas
     useEffect(() => {
-        const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7023/bingohub')
+        const startGame = async () => {
+            try {
+                const response = await fetch('https://localhost:7023/api/games/start', { method: 'POST' });
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error al iniciar el juego:', error);
+            }
+        };
+        startGame();
+    }, []);
+
+     // Establecer la conexión con SignalR
+    useEffect(() => {
+        connection.current = new HubConnectionBuilder()
+            .withUrl("https://localhost:7023/bingoHub")
             .build();
 
-        connection.start().then(() => {
-            console.log('Conectado al hub de Bingo');
-            connection.on('GameWon', () => {
-                window.location.href = '/';
-            });
-        }).catch(err => console.error('Error al conectar con el hub:', err));
+        connection.current.start()
+            .then(() => console.log("Conectado con el Hub de Bingo"))
+            .catch(err => console.error('Error al conectar con el Hub:', err));
 
+        connection.current.on("ReceiveMessage", (message) => {
+            alert(message);
+            onGoToHome();
+        });
         return () => {
-            connection.stop();
+            if (connection.current) {
+                connection.current.stop();
+            }
         };
-    }, []);
+    }, [onGoToHome]);
 
     return (
         <div>
             <nav className="game-nav">
                 <h1>Bingo Game</h1>
                 <span className="user-info">Usuario: {username}</span>
+                <button onClick={handleLogout} className="logout-button">Logout</button>
             </nav>
 
             <div className="container-game">
@@ -143,6 +192,7 @@ const Game = ({ onGoToHome }) => {
                                             onClick={() => handleCellClick(rowIndex, numberIndex, number)}>
                                             {number}
                                         </div>
+
                                     );
                                 })}
                             </div>
@@ -163,32 +213,31 @@ const Game = ({ onGoToHome }) => {
                         </div>
                     </div>
                     <button onClick={handleBingoClick} className="bingo-button">BINGO</button>
+                    <div className="game-type-selection">
+                        <label>
+                            Selecciona el tipo de juego:
+                            <select
+                                value={gameType} onChange={handleGameTypeChange} disabled={gameStarted}>
+                                <option value="">Seleccione</option>
+                                <option value="fullHouse">Cartón Pleno</option>
+                                <option value="horizontalLine">Línea Horizontal</option>
+                                <option value="verticalLine">Línea Vertical</option>
+                                <option value="diagonal">Diagonal</option>
+                                <option value="corners">Esquinas</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="players-list-section">
                     <div className="players-list">
-                        {/* Lista de jugadores */}
+                        {/* Pendiente Lista de jugadores */}
                         <h2>Jugadores en sala</h2>
                         {/* Pendiente lista de jugadores que renderizar aquí */}
                     </div>
                 </div>
-
-                <div className="game-type-selection">
-                    <label>
-                        Selecciona el tipo de juego:
-                        <select
-                            value={gameType} onChange={handleGameTypeChange} disabled={gameStarted}>
-                            <option value="">Seleccione</option>
-                            <option value="fullHouse">Cartón Pleno</option>
-                            <option value="horizontalLine">Línea Horizontal</option>
-                            <option value="verticalLine">Línea Vertical</option>
-                            <option value="diagonal">Diagonal</option>
-                            <option value="corners">Esquinas</option>
-                        </select>
-                    </label>
-                </div>
-
             </div>
+
             <footer className="footer">
                 <p>© 2024 Bingo GermanBalaguera. Todos los derechos reservados.</p>
             </footer>

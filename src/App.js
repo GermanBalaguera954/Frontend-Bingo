@@ -28,15 +28,18 @@ const App = () => {
     const handleGoToHome = () => {
         setCurrentPage('home'); // Cambia a la vista Home
     };
+    const handleGoToLogin = () => {
+        setCurrentPage('login'); // Cambia a la vista Login
+    };
 
     return (
         <AuthProvider>
             <div className="App">
                 {currentPage === 'login' && <LoginForm onLogin={handleLoginSuccess} setCurrentPage={setCurrentPage} />}
                 {currentPage === 'register' && <RegisterForm onRegister={handleRegisterSuccess} setCurrentPage={setCurrentPage} />}
-                {currentPage === 'home' && <Home onGameStart={handleGoToLobby} />}
-                {currentPage === 'lobby' && <Lobby onGameStart={handleGoToGame} />}
-                {currentPage === 'game' && <Game onGoToHome={handleGoToHome} />}
+                {currentPage === 'home' && <Home onGameStart={handleGoToLobby} onGoToLogin={handleGoToLogin} />}
+                {currentPage === 'lobby' && <Lobby onGameStart={handleGoToGame} onGoToLogin={handleGoToLogin} />}
+                {currentPage === 'game' && <Game onGoToHome={handleGoToHome} onGoToLogin={handleGoToLogin}/>}
             </div>
         </AuthProvider>
     );
